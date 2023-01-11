@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.abs.mapper.LuYouYinDaoMapper">
+    <resultMap id="GroupMap" type="com.abs.pojo.AbLuyouyindaoChatgroup">
+        <id column="group_id" property="groupId"/>
+        <result column="group_name" property="groupName"/>
+        <result column="user_id" property="userId"/>
+    </resultMap>
+
+    <resultMap id="chatMap" type="com.abs.pojo.AbLuyouyindaoChat">
+        <id column="chat_id" property="chatId"/>
+        <result column="user_id" property="userId"/>
+    </resultMap>
+
+    <resultMap id="userMap" type="com.abs.pojo.AbUser">
+        <id column="user_id" property="userId"/>
+        <result column="user_phone" property="userPhone"/>
+        <result column="user_name" property="userName"/>
+        <result column="user_password" property="userPassword"/>
+        <result column="user_role" property="userRole"/>
+        <result column="user_gender" property="userGender"/>
+        <result column="user_instruction" property="userInstruction"/>
+        <result column="user_image" property="userImage"/>
+    </resultMap>
+
+    <resultMap id="luxianMap" type="com.abs.pojo.AbLuyouyindaoLuxian">
+        <result column="user_id" property="uerId"></result>
+        <result column="start_time" property="startTime"></result>
+        <result column="end_time" property="endTime"></result>
+        <result column="start_address" property="startAddress"></result>
+        <result column="end_address" property="endAddress"></result>
+
+    </resultMap>
+
+    <insert id="addGroup" parameterType="com.abs.pojo.AbLuyouyindaoChatgroup">
+        insert into ab_luyouyindao_chatgroup (group_name, user_id, time, img, type)
+        values (#{groupName}, #{groupId}, #{time}, #{img}, #{type});
+    </insert>
+    <insert id="addChat" parameterType="com.abs.pojo.AbLuyouyindaoChat">
+        insert into ab_luyouyindao_chat (content, user_id, time)
+        values (#{content}, #{userId}, #{time});
+    </insert>
+
+    <insert id="addLianxi" parameterType="com.abs.pojo.AbLuyouyindaoChatlianxi">
+        insert into ab_luyouyindao_chatlianxi (group_id, chat_id)
+        values (#{groupId}, #{chatId});
+    </insert>
+    <delete id="deleteById" parameterType="integer">
+        delete
+        from ab_luyouyindao_luxian
+        where id = #{id};
+    </delete>
+
+    <select id="selectAllJingQus" resultType="com.abs.pojo.AbLuyouyindaoJingqu">
+        select *
+        from ab_luyouyindao_jingqu;
+    </select>
+    <select id="selectJingQusByConditions" parameterType="string" resultType="com.abs.pojo.AbLuyouyindaoJingqu">
+        select *
+        from ab_luyouyindao_jingqu
+        where type like '%${conditions}%';
+    </select>
+    <select id="selectJingQusByName" resultType="com.abs.pojo.AbLuyouyindaoJingqu">
+        select *
+        from ab_luyouyindao_jingqu
+        where name like '%${name}%';
+    </select>
+    <select id="selectChatGroup" parameterType="integer" resultMap="GroupMap">
+        select *
+        from ab_luyouyindao_chatgroup
+        where group_id = #{GroupId};
+    </select>
+    <select id="selectChatByGroupId" parameterType="integer" resultMap="chatMap">
+        SELECT *
+        from ab_luyouyindao_chat
+        where ab_luyouyindao_chat.chat_id in
+              (SELECT chat_id from ab_luyouyindao_chatlianxi WHERE group_id = #{id})
+        ORDER BY time ASC
+    </select>
+    <select id="selectAllGroups" resultMap="GroupMap">
+        select *
+        from ab_luyouyindao_chatgroup;
+    </select>
+
+    <select id="selectJingQusById" parameterType="integer" resultType="com.abs.pojo.AbLuyouyindaoJingqu">
+        select *
+        from ab_luyouyindao_jingqu
+        where id = #{id}
+    </select>
+
+    <select id="selectUserById" parameterType="string" resultMap="userMap">
+        select *
+        from ab_user
+        where user_id = #{id};
+    </select>
+    <select id="selectGroupById" parameterType="integer" resultMap="GroupMap">
+        select *
+        from ab_luyouyindao_chatgroup
+        where group_id = #{id};
+    </select>
+
+    <select id="getMaxId" resultType="integer">
+        select max(chat_id)
+        from ab_luyouyindao_chat
+    </select>
+    <select id="selectAllLuXian" resultMap="luxianMap">
+        select *
+        from ab_luyouyindao_luxian where user_id = #{userId} limit #{begin},#{pageSize};
+    </select>
+    <select id="selectCount" resultType="java.lang.Integer">
+        select COUNT(*) from ab_luyouyindao_luxian
+    </select>
+
+</mapper>

@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Responsive Admin Dashboard Template">
+    <meta name="keywords" content="admin,dashboard">
+    <meta name="author" content="skcats">
+    <!-- The above 6 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+
+    <!-- Title -->
+    <title></title>
+
+    <!-- Styles -->
+    <!--        <link href="https://fonts.googleapis.com/css?family=Ubuntu" rel="stylesheet">-->
+    <link href="../static/assets/plugins/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="../static/assets/plugins/font-awesome/css/font-awesome.min.css" rel="stylesheet">
+    <link href="../static/assets/plugins/icomoon/style.css" rel="stylesheet">
+    <link href="../static/assets/plugins/uniform/css/default.css" rel="stylesheet"/>
+    <link href="../static/assets/plugins/switchery/switchery.min.css" rel="stylesheet"/>
+
+    <!-- Theme Styles -->
+    <link href="../static/assets/css/ecaps.min.css" rel="stylesheet">
+    <link href="../static/assets/css/custom.css" rel="stylesheet">
+    <link rel="stylesheet" href="../static/layui/css/layui.css">
+
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+    <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <style>
+        .login-page {
+            width: 100%;
+            height: 100%;
+            background: url("../static/assets/images/banner-3.png") no-repeat center center fixed;
+            background-size: cover;
+            padding: 0px;
+        }
+    </style>
+
+</head>
+<body>
+
+<!-- Page Container -->
+<div class="page-container">
+    <!-- Page Inner -->
+    <div class="page-inner login-page">
+        <div id="main-wrapper" class="container-fluid">
+            <div class="row">
+                <div class="col-sm-6 col-md-3 login-box">
+                    <h4 class="login-title">账号登录</h4>
+                    <form action="/login" method="post" enctype="multipart/form-data">
+                        <div class="form-group">
+                            <label for="exampleInputEmail1">账户</label>
+                            <input name="id" class="form-control" placeholder="请输入：账号/Email/Phone"
+                                   id="exampleInputEmail1">
+                            <!--                                        type="email"-->
+                        </div>
+                        <div class="form-group">
+                            <label for="exampleInputPassword1">密码</label>
+                            <input name="password" type="password" class="form-control" id="exampleInputPassword1">
+                        </div>
+
+                        <button style="width: 100%;font-size: 10px" type="submit" class="btn btn-primary">登录</button>
+                        <a id="wjpassword" class="forgot-link" style="float:left;">忘记密码？</a>
+                        <a class="forgot-link" href="/toRegisterPage" style="float:right;">立即注册</a><br>
+
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div><!-- /Page Content -->
+</div><!-- /Page Container -->
+<!-- Javascripts -->
+<script src="../static/assets/plugins/jquery/jquery-3.1.0.min.js"></script>
+<script src="../static/assets/plugins/bootstrap/js/bootstrap.min.js"></script>
+<script src="../static/assets/plugins/jquery-slimscroll/jquery.slimscroll.min.js"></script>
+<script src="../static/assets/plugins/uniform/js/jquery.uniform.standalone.js"></script>
+<script src="../static/assets/plugins/switchery/switchery.min.js"></script>
+<script src="../static/assets/js/ecaps.min.js"></script>
+<script src="../static/layui/layui.js"></script>
+
+
+<div id="WJPage" class="layui-hide">
+    <div class="col-sm-6 col-md-3 login-box" style="height: 600px;">
+        <h4 class="login-title">找回密码</h4>
+        <div id="one">
+            <div class="form-group">
+                <label for="exampleInputEmail1">输入注册时填写的电话号码或者邮箱</label>
+                <input id="one_input" name="id" class="form-control" placeholder="请输入Email/Phone">
+
+            </div>
+            <button id="one_next" style="width: 100%;font-size: 10px" type="submit" class="btn btn-primary">下一步</button>
+        </div>
+        <div id="two" class="layui-hide">
+            <div style="width: 100%;font-size: 20px;margin-bottom: 20px" >
+                <span class="emailOrphone"></span>
+                是否正确
+            </div>
+            <a id="two_up" class="btn btn-primary" style="float: left"> 上一步</a>
+<!--            <a id="two_OKF" style="float: right"> 正确</a>-->
+            <a id="two_OKF" class="btn btn-primary" style="float: right">正确</a>
+
+        </div>
+        <div id="there" class="layui-hide">
+            <a>我们已向</a>
+            <span class="emailOrphone"></span>
+            <a>发送了验证码</a>
+            <div class="form-group">
+                <input id="VerifyCode" placeholder="请输入收到的验证码" type="text" class="form-control" style="float: left">
+                <!--                                        <a class="btn btn-primary" style="float: right">输入验证码</a>-->
+            </div>
+<!--            <a id="there_up" class="btn btn-primary"> 上一步</a>-->
+            <a id="there_code_msg" style="float:right;"></a>
+
+
+            <button id="there_Code_bt" style="width: 100%;font-size: 10px;margin-top: 20px" type="submit"
+                    class="btn btn-primary layui-hide">
+                确认验证码
+            </button>
+        </div>
+
+        <div id="four" class="layui-hide">
+            <div class="form-group">
+                <label for="exampleInputEmail1">新密码</label>
+                <input class="form-control" placeholder="请输入新密码" id="newpassword_1">
+            </div>
+            <div class="form-group">
+                <label for="exampleInputEmail1">请再次输入新密码</label>
+                <input class="form-control" placeholder="请再次输入新密码" id="newpassword_2">
+            </div>
+            <button id="four_pa_OK" style="width: 100%;font-size: 10px" type="submit" class="btn btn-primary">
+                确认修改
+            </button>
+
+        </div>
+        <!--                    <div class="form-group">-->
+        <!--                        <label for="exampleInputPassword1">密码</label>-->
+        <!--                        <input name="password" type="password" class="form-control">-->
+        <!--                    </div>-->
+
+        <!--                    <button style="width: 100%;font-size: 10px" type="submit" class="btn btn-primary">登录</button>-->
+        <!--&lt;!&ndash;                    <a id="" class="forgot-link" style="float:left;">忘记密码？</a>&ndash;&gt;-->
+        <!--                    <a class="forgot-link" href="/toRegisterPage" style="float:right;">立即注册</a><br>-->
+
+    </div>
+
+</div>
+
+
+<script>
+
+
+    const A2 = $("#wjpassword");
+    let aa='';
+    $("#wjpassword").click(function () {
+        $("#WJPage").removeClass("layui-hide")
+
+      aa  = layer.open({
+            type: 1,
+            title: false,
+            closeBtn: 0,
+            shadeClose: true,
+          // skin: 'yourclass',
+            content: $("#WJPage"),
+            btnAlign: 'c',
+            btn: ['取消找回']
+            , yes: function (index, layero) { //取消
+                layer.close(index)
+                //按钮【按钮二】的回调
+                //return false 开启该代码可禁止点击该按钮关闭
+            }
+            , end: function () {
+                $("#WJPage").addClass("layui-hide")
+
+                $("#one").removeClass("layui-hide")
+                $("#two").addClass("layui-hide")
+                $("#there").addClass("layui-hide")
+                $("#four").addClass("layui-hide")
+                $("#one_input").val("")
+              $("#VerifyCode").val("")
+              $("#there_code_msg").text("")
+
+
+          }
+
+        });
+
+    })
+    $("#one_next").click(function () {
+        let one_input = $("#one_input").val();
+        if (one_input != null && one_input !== "") {
+            A2.data('phone_email',$("#one_input").val())
+            $(".emailOrphone").text(one_input)
+            $("#one").addClass("layui-hide")
+            $("#two").removeClass("layui-hide")
+
+        } else {
+            layer.msg("输入不能为空")
+        }
+    })
+    $("#two_up").click(function () { //返回填写email/phone 第一步
+        $("#two").addClass("layui-hide")
+        $("#one").removeClass("layui-hide")
+    })
+    $("#there_up").click(function () { //返回确认发送页面
+        $("#one").addClass("layui-hide")
+        $("#two").removeClass("layui-hide")
+        $("#there").addClass("layui-hide")
+    })
+
+    $("#two_OKF").click(function () { //填写OK 点击 发送验证码
+        $("#one").addClass("layui-hide")
+        $("#two").addClass("layui-hide")
+        $("#there").removeClass("layui-hide")
+        console.log($("#one_input").val() + "验证码")
+        $("#there_code_msg").text("验证码发送中。。。")
+
+        $.ajax({
+            url: '/User/findPassword',
+            type: 'post',
+            dataType: 'json',
+            data: {'toCode': $("#one_input").val(), 'who': "1"},
+            success: function (res) {
+                if (res.code === "200") {//发送成功
+                    $("#there_code_msg").text("验证码发送成功")
+
+                    $("#there_Code_bt").removeClass("layui-hide")//可以点击确认
+                } else {//错误的 返回去 确认格式
+                    $("#one").addClass("layui-hide")
+                    $("#two").removeClass("layui-hide")
+                    $("#there").addClass("layui-hide")
+                    layer.msg(res.message)
+
+                }
+            }
+        })
+    })
+
+
+    $("#there_Code_bt").click(function () { //确认验证码
+        if ($("#VerifyCode").val() === "") {
+            layer.msg("验证码输入不能为空")
+
+        } else {
+                // alert($("#VerifyCode").val()+"=="+A2.data('phone_email'))
+        $.ajax({
+            url: '/User/findPassword',
+            type: 'post',
+            dataType: 'json',
+            data: {'toCode': $("#VerifyCode").val(), 'who': "2"},
+            success: function (res) {
+                if (res.code === "200") {//验证码OK
+                    $("#one").addClass("layui-hide")
+                    $("#two").addClass("layui-hide")
+                    $("#there").addClass("layui-hide")
+                    $("#four").removeClass("layui-hide")// 进行密码修改
+                } else {
+                    layer.msg(res.message)
+                    // $("#em_message").text("验证码获取失败")
+                    // $("#doCode").removeAttr("disabled")
+                    // $("#doCode").removeClass("layui-btn-disabled")
+                }
+            }
+        })
+    }
+    })
+    $("#four_pa_OK").click(function () { //修改密码
+        let newpassword_1 = $("#newpassword_1").val();
+        let newpassword_2 = $("#newpassword_2").val();
+        if (newpassword_1 !== "" && newpassword_2 !== "") {
+            if (newpassword_2 === newpassword_1) {
+
+                // console.log("!!!!::"+newpassword_1+A2.data('phone_email'))
+                $.ajax({
+                    url:'/User/findPassword_updataPassword',
+                    type: 'post',
+                    data:{"password":newpassword_1,"email_photo":A2.data('phone_email')},
+                    success:function (res) {
+                        if (res.code==="200"){
+                            layer.alert('找回密码成功', {icon: 6});
+
+                            layer.close(aa)
+                            $("#one").removeClass("layui-hide")
+                            $("#two").addClass("layui-hide")
+                            $("#there").addClass("layui-hide")
+                            $("#four").addClass("layui-hide")
+                            $("#one_input").val("")
+                        }else {
+                            alert("失败 请重试")
+                        }
+                    }
+                })
+
+            }else {
+                layer.msg("两次密码输入不一致")
+
+            }
+        } else {
+            layer.msg("两次密码不能为空")
+        }
+
+    })
+
+
+</script>
+
+
+</body>
+</html>

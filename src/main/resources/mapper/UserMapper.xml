@@ -1,0 +1,288 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.abs.mapper.UserMapper">
+
+<!--    pageSize为0 就要查询全部-->
+    <sql id="fenye">
+        <if test="Fenye.pageSize!=0 ">
+            limit #{Fenye.begin},#{Fenye.pageSize}
+        </if>
+    </sql>
+
+    
+    <!--    boolean register(UserController user);-->
+    <insert id="register" parameterType="com.abs.pojo.User">
+        insert into ab_user(user_id, user_phone, user_name, user_password, user_role, user_gender, user_instruction,
+                            user_image,user_email)
+        values (#{user_id}, #{user_phone}, #{user_name}, #{user_password}, #{user_role}, #{user_gender},
+                #{user_instruction}, #{user_image}, #{user_email})
+    </insert>
+    <select id="getUserByEmail" resultMap="user">
+        select *
+        from ab_user
+        where user_email = #{user_email}
+    </select>
+
+
+    <resultMap id="user" type="com.abs.pojo.User">
+        <id column="user_id" property="user_id"/>
+        <result property="user_name" column="user_name"/>
+        <result property="user_phone" column="user_phone"/>
+        <result property="user_password" column="user_password"/>
+        <result property="user_role" column="user_role"/>
+        <result property="user_gender" column="user_gender"/>
+        <result property="user_instruction" column="user_instruction"/>
+        <result property="user_image" column="user_image"/>
+        <result property="user_email" column="user_email"/>
+    </resultMap>
+    <!-- UserController getuser(String user_id);-->
+
+    <select id="getUserById" resultMap="user">
+        select *
+        from ab_user
+        where user_id = #{user_id} or user_phone=#{user_id}
+    </select>
+<!--    User getUserByPhone(String phone);-->
+    <select id="getUserByPhone" resultMap="user">
+        select *
+        from ab_user
+        where user_phone = #{user_phone}
+    </select>
+
+
+    <!--    List<User> getAlluser();-->
+    <select id="getAllUser" resultMap="user">
+        select *
+        from ab_user
+    </select>
+
+
+    <!--    boolean deleteuser(String user_id);-->
+    <delete id="DeleteUserById" parameterType="java.lang.String">
+        delete
+        from ab_user
+        where user_id = #{user_id}
+    </delete>
+
+    <!--    boolean updateUser(UserController user);-->
+    <!--    update ab_user set user_phone=#{user_phone}, user_name=#{user_name}, user_password=#{user_password}, user_gender=#{user_gender}, user_instruction=#{user_instruction}, user_image=#{user_image} where  user_id=#{user_id}-->
+    <update id="UpdateUser" parameterType="com.abs.pojo.User">
+        update ab_user
+        <set>
+            <if test="user_phone!=null and user_phone!=''">
+                user_phone=#{user_phone},
+            </if>
+            <if test="user_name!=null and user_name!=''">
+                user_name=#{user_name},
+            </if>
+            <if test="user_password!=null and user_password!=''">
+                user_password=#{user_password},
+            </if>
+            <if test="user_gender!=null and user_gender!=''">
+                user_gender=#{user_gender},
+            </if>
+            <if test="user_role!=null and user_role!=''">
+                user_role=#{user_role},
+            </if>
+            <if test="user_instruction!=null and user_instruction!=''">
+                user_instruction=#{user_instruction},
+            </if>
+            <if test="user_image!=null and user_image!=''">
+                user_image=#{user_image},
+            </if>
+            <if test="user_email!=null and user_email!=''">
+                user_email=#{user_email},
+            </if>
+        </set>
+        where user_id=#{user_id}
+    </update>
+
+
+    <resultMap id="userline" type="com.abs.pojo.AbLuyouyindaoLuxian">
+        <id column="id" property="id"/>
+        <result column="type" property="type"/>
+        <result column="way" property="way"/>
+        <result column="time" property="time"/>
+        <result column="start_time" property="startTime"/>
+        <result column="end_time" property="endTime"/>
+        <result column="users" property="users"/>
+        <result column="price" property="price"/>
+        <result column="user_id" property="userId"/>
+    </resultMap>
+    <!--    List<AbLuyouyindaoLuxian> getUserLineById(String user_id);-->
+    <select id="getUserLineById" resultMap="userline">
+        select *
+        from ab_luyouyindao_luxian
+        where user_id = #{user_id} <include refid="fenye"/>
+    </select>
+    <!--用户住宿记录表List-->
+    <!--    List<AbZhusuOrders> getUserStaysById(String user_id);-->
+    <!--    //主表查询的resultMap-->
+    <resultMap id="zhusuorder" type="com.abs.pojo.User_zhusu">
+        <id column="id" property="id"/>
+        <result column="userid" property="userid"/>
+        <result column="zhusu_id" property="zhusuId"/>
+        <result property="time" column="time"/>
+        <!--        子表查询  column传给子查询参数的-->
+        <collection property="zhusuZhusuList" ofType="com.abs.pojo.AbZhusuZhusu" select="getZhusuByZhusu_id"
+                    column="zhusu_id"/>
+    </resultMap>
+    <!--    主表查询的SQL-->
+    <select id="getUserStaysById" resultMap="zhusuorder">
+        select *
+        from ab_zhusu_orders
+        where userid = #{user_id}
+        order by time desc <include refid="fenye"/>
+    </select>
+    <!--    子表查询的resultMap-->
+    <resultMap id="zhusu" type="com.abs.pojo.AbZhusuZhusu">
+        <id column="zhusu_id" property="zhusuId"/>
+        <result column="name" property="name"/>
+        <result column="img" property="img"/>
+        <result column="tv" property="tv"/>
+        <result column="hot" property="hot"/>
+        <result column="introduction" property="introduction"/>
+        <result column="way" property="way"/>
+        <result column="price" property="price"/>
+        <result column="address" property="address"/>
+        <result column="type" property="type"/>
+        <result column="phone" property="phone"/>
+    </resultMap>
+    <!--    子表查询的SQL-->
+    <!--    通过zhusu_id查询住宿店铺-->
+    <select id="getZhusuByZhusu_id" resultMap="zhusu">
+        select *
+        from ab_zhusu_zhusu
+        where zhusu_id = #{zhusu_id}
+    </select>
+
+
+    <!--    查找 用户话题-->
+    <!--    List<AbLuyoutaolunHuati> getUserTopicById(String user_id);   -->
+    <resultMap id="UserTopicById" type="com.abs.pojo.AbLuyoutaolunHuati">
+        <id column="topic_id" property="topicId"/>
+        <result column="user_id" property="userId"/>
+        <result column="title" property="title"/>
+        <result column="introduction" property="introduction"/>
+        <result column="time" property="time"/>
+        <result column="type" property="type"/>
+        <result column="address" property="address"/>
+        <result column="read" property="read"/>
+    </resultMap>
+    <select id="getUserTopicById" resultMap="UserTopicById">
+        select *
+        from ab_luyoutaolun_huati
+        where user_id = #{user_id}
+        order by time desc <include refid="fenye"/>
+    </select>
+
+
+    <!--    查找 *话题评论-->
+    <!--    List<User_getPinlun>getUserPinglunUserByUserId(String user_id);-->
+    <resultMap id="getpinlun" type="com.abs.pojo.User_getPinlun">
+        <id column="topic_id" property="topicId"/>
+        <result column="user_id" property="userId"/>
+        <result column="title" property="title"/>
+        <result column="introduction" property="introduction"/>
+        <result column="time" property="time"/>
+        <result column="type" property="type"/>
+        <result column="address" property="address"/>
+        <result column="read" property="read"/>
+        <collection property="PinlunList" ofType="com.abs.pojo.AbLuyoutaolunComment" select="getTopicPinglunByTopicId"
+                    column="topic_id"/>
+    </resultMap>
+    <!--    主表查询-->
+    <select id="getUserPinglunUserByUserId" resultMap="getpinlun">
+        select *
+        from ab_luyoutaolun_huati
+        where user_id = #{user_id}
+        order by time desc <include refid="fenye"/>
+    </select>
+    <resultMap id="Topic_pinglun" type="com.abs.pojo.AbLuyoutaolunComment">
+        <id column="comments_id" property="commentsId"/>
+        <result column="topic_id" property="topicId"/>
+        <result column="user_id" property="userId"/>
+        <result column="content" property="content"/>
+        <result column="like" property="like"/>
+        <result column="time" property="time"/>
+    </resultMap>
+    <!--    List<AbLuyoutaolunComment>getTopicPinglunByTopicId(Integer Topic_id);-->
+    <select id="getTopicPinglunByTopicId" resultMap="Topic_pinglun">
+        select *
+        from ab_luyoutaolun_comment
+        where topic_id = #{topic_id}
+        order by time desc
+    </select>
+
+
+    <!--    查找 * 评论回复-->
+    <!--    List<User_getHuifu>getUserHuifuByUserId(String user_id);-->
+    <resultMap id="UserHuifu" type="com.abs.pojo.User_getHuifu">
+        <id column="comments_id" property="commentsId"/>
+        <result column="topic_id" property="topicId"/>
+        <result column="user_id" property="userId"/>
+        <result column="content" property="content"/>
+        <result column="like" property="like"/>
+        <result column="time" property="time"/>
+        <collection property="HuifuList" ofType="com.abs.pojo.AbLuyoutaolunHuifu" select="getPinglunHuifuByPinlunId"
+                    column="comments_id"/>
+    </resultMap>
+    <select id="getUserHuifuByUserId" resultMap="UserHuifu">
+        select *
+        from ab_luyoutaolun_comment
+        where user_id = #{user_id}
+        order by time desc <include refid="fenye"/>
+    </select>
+    <resultMap id="huifu" type="com.abs.pojo.AbLuyoutaolunHuifu">
+        <id column="response_id" property="responseId"/>
+        <result column="comments_id" property="commentsId"/>
+        <result column="user_id" property="userId"/>
+        <result column="topicId" property="topic_id"/>
+        <result column="content" property="content"/>
+        <result column="like" property="like"/>
+        <result column="time" property="time"/>
+    </resultMap>
+    <!--    List<AbLuyoutaolunHuifu>getPinglunHuifuByPinlunId(String user_id);-->
+    <select id="getPinglunHuifuByPinlunId" resultMap="huifu">
+        select *
+        from ab_luyoutaolun_huifu
+        where comments_id = #{comments_id}
+        order by time desc
+    </select>
+
+
+    <!--删除评论 回复    who值 删除什么 话题（0） 评论（1）  回复（2）->
+    <!-    boolean DeleteUser_PinglunOrhuifuById(String who,String user_id,Integer id);-->
+    <delete id="DeleteUser_PinglunOrhuifuById" parameterType="java.lang.Object">
+        delete
+        <if test="who==0">
+            huati,pinlun,huifu
+            from ab_luyoutaolun_huati as huati
+            left outer join ab_luyoutaolun_comment as pinlun
+            on huati.topic_id=pinlun.topic_id
+            left outer join ab_luyoutaolun_huifu as huifu
+            on pinlun.comments_id=huifu.comments_id
+        </if>
+        <if test="who==1">
+            from ab_luyoutaolun_comment
+        </if>
+        <if test="who==2">
+            from ab_luyoutaolun_huifu
+        </if>
+        where
+        <if test="who==0">
+            huati.topic_id=#{id}
+            and huati.user_id=#{user_id}
+        </if>
+        <if test="who==1">
+            user_id=#{user_id}and comments_id=#{id}
+        </if>
+        <if test="who==2">
+            user_id=#{user_id}and response_id=#{id}
+        </if>
+    </delete>
+
+
+</mapper>

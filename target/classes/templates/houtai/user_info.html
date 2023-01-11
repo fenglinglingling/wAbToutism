@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="../../static/layui/css/layui2.css">
+    <style>
+        .icon{
+            width: 250px;
+            height: 80px;
+            margin-left: 25px;
+            margin-top: 20px;
+            display: flex;
+        }
+        .icon-img{
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            border: 4px solid rgba(255,255,255,0.3);
+            overflow: hidden;
+        }
+        .icon-img img{
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+    </style>
+</head>
+<body>
+<form class="layui-form" id="form_data"  action="" method="post">
+        <div style="width: 100%;height: 100px;margin: 0 auto;">
+            <div id="imageShow" class="icon" style="margin-top: 30px;">
+                <div class="icon-img" style="margin-left: 125px;">
+                    <img src="../../static/image/banner-1.png" id="uploadImg" style="background-repeat: no-repeat"/>
+                </div>
+            </div>
+        </div>
+
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">账号</label>
+        <div class="layui-input-inline">
+            <input type="text" id="userId" name="userId" disabled readonly class="layui-input layui-disabled">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">姓名</label>
+        <div class="layui-input-inline">
+            <input type="text" id="userName" name="userName" disabled readonly class="layui-input layui-disabled">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">性别</label>
+        <div class="layui-input-inline">
+            <input type="text" id="userGender" name="userGender" disabled readonly class="layui-input layui-disabled">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">角色</label>
+        <div class="layui-input-inline">
+            <input type="text" id="userRole" name="userRole" disabled readonly class="layui-input layui-disabled">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">手机号</label>
+        <div class="layui-input-inline">
+            <input type="text" id="userPhone" name="userPhone" disabled readonly class="layui-input layui-disabled">
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">简介</label>
+        <div class="layui-input-inline">
+            <input type="text" id="userInstruction" name="userInstruction" disabled  class="layui-input layui-disabled">
+        </div>
+    </div>
+
+<!--    <div class="layui-form-item">-->
+<!--        <div class="layui-input-block">-->
+<!--            <button class="layui-btn" id="btn_data" lay-submit lay-filter="formDemo">立即提交</button>-->
+<!--            <button type="reset" class="layui-btn layui-btn-primary">重置</button>-->
+<!--        </div>-->
+<!--    </div>-->
+</form>
+
+<script src="../../static/layui/layui.js"></script>
+<script src="../../static/layui/js/jquery-3.2.1.min.js"></script>
+<script>
+    $(function () {
+        // alert("进入了修改页面");
+        $.ajax({
+            url: "getUserInfo",
+            type: "get",
+            data: {},
+            dataType: "json",
+            success: function (res) {
+                if (res.code === 200) {
+                    $("#uploadImg").attr("src","../static/image/"+res.data.userImage);
+                    $("#userId").attr("value",res.data.userId);
+                    $("#userPhone").attr("value",res.data.userPhone);
+                    $("#userName").attr("value",res.data.userName);
+                    $("#userRole").attr("value",res.data.userRole);
+                    $("#userGender").attr("value",res.data.userGender);
+                    $("#userInstruction").attr("value",res.data.userInstruction);
+                } else {
+                    layer.msg("查找info失败", {time: 2000, icon: 2, shade: [0.5, '#000', true]});
+                }
+            }
+        })
+    })
+
+</script>
+
+</body>
+</html>

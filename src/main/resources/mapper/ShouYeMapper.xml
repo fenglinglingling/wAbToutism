@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.abs.mapper.ShouYeMapper">
+    <select id="getAllZiXun" resultType="shouye_zixun">
+        select * from ab_shouye_zixun
+    </select>
+
+    <select id="getContentById" resultType="String">
+        select content from ab_shouye_zixun where id = #{id}
+    </select>
+
+    <select id="getAllDiQu" resultType="shouye_diqu">
+        select * from ab_shouye_diqu
+    </select>
+
+
+</mapper>

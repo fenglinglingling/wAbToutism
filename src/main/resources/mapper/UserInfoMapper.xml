@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.abs.mapper.UserInfoMapper">
+
+    <resultMap id="User" type="com.abs.pojo.AbUser">
+        <id property="userId" column="user_id"></id>
+        <result property="userPhone" column="user_phone"></result>
+        <result property="userName" column="user_name"></result>
+        <result property="userPassword" column="user_password"></result>
+        <result property="userRole" column="user_role"></result>
+        <result property="userGender" column="user_gender"></result>
+        <result property="userInstruction" column="user_instruction"></result>
+        <result property="userImage" column="user_image"></result>
+
+    </resultMap>
+
+    <insert id="addUser" parameterType="com.abs.pojo.AbUser">
+        insert into  ab_user(user_id,user_phone,user_name,user_password,user_role,user_gender,user_instruction,user_image) values (#{userId},#{userPhone},#{userName},#{userPassword},#{userRole},#{userGender},#{userInstruction},#{userImage})
+    </insert>
+
+
+    <select id="getUserByPage" resultMap="User">
+        SELECT
+            *
+        FROM
+            ab_user
+        ORDER BY user_id ASC
+            LIMIT #{page}, #{pageSize}
+    </select>
+
+
+    <select id="getUserByPageByKey" resultMap="User">
+        SELECT
+            *
+        FROM
+            ab_user
+        WHERE user_name LIKE #{search_key}
+        ORDER BY user_id ASC
+            LIMIT #{page}, #{pageSize}
+    </select>
+
+    <select id="countUserByPageByKey" resultType="int">
+        SELECT
+            count(*)
+        FROM
+            ab_user
+        WHERE user_name LIKE #{search_key}
+    </select>
+
+    <update id="editUser" parameterType="com.abs.pojo.AbUser">
+        update ab_user
+        set  user_phone=#{userPhone},user_name=#{userName},user_role=#{userRole},user_gender=#{userGender},user_instruction=#{userInstruction}
+        where  user_id=#{userId};
+    </update>
+<!--用户修改个人信息-->
+    <update id="editUserGeRenInfo" parameterType="com.abs.pojo.AbUser">
+        update ab_user
+        set  user_phone=#{userPhone},user_name=#{userName},user_gender=#{userGender},user_instruction=#{userInstruction}
+        where  user_id=#{userId};
+    </update>
+
+    <update id="editUserImg">
+        update ab_user
+        set  user_image=#{imgName}
+        where  user_id=#{id};
+    </update>
+
+    <!--    通过id查询的用户信息-->
+    <select id="findUpdateUser" resultMap="User">
+        select *
+        from ab_user
+        where user_id=#{id};
+    </select>
+
+
+
+<!--    查询所有的用户信息-->
+    <select id="getAllUser" resultMap="User">
+        select *
+        from ab_user;
+    </select>
+
+<!--    查找用户的总数量-->
+    <select id="countUserNumber" resultType="int">
+        SELECT COUNT(*)
+        FROM ab_user;
+    </select>
+
+    <!--    通过用户名模糊查询用户信息-->
+    <select id="getAllUserByUserName" parameterType="java.lang.String" resultMap="User">
+        select *
+        from ab_user where user_name like '%${atr}%';
+    </select>
+
+
+<!--    通过用户id删除用户信息-->
+    <delete id="deleteUser" parameterType="java.lang.String">
+        delete
+        from ab_user
+        where user_id=#{atr};
+    </delete>
+
+</mapper>

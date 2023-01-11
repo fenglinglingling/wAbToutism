@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.abs.mapper.ZiXunMapper">
+
+    <resultMap id="Question" type="com.abs.pojo.AbZixunQuestions">
+        <id property="questionId" column="question_id"></id>
+        <result property="name" column="name"></result>
+        <result property="content" column="content"></result>
+        <result property="type" column="type"></result>
+    </resultMap>
+
+    <resultMap id="Reply" type="com.abs.pojo.AbZixunReply">
+        <id property="replyId" column="reply_id"></id>
+        <result property="questionId" column="question_id"></result>
+        <result property="replyContent" column="reply_content"></result>
+    </resultMap>
+
+    <!--    查询所有的问题-->
+    <select id="getCount" resultType="Integer">
+        select count(*)
+        from ab_zixun_questions;
+    </select>
+
+    <select id="getCountByKey" resultType="Integer">
+        select count(*)
+        from ab_zixun_questions
+        <if test="key=='未处理' ">
+            where type = 0
+        </if>
+        <if test="key=='已处理' ">
+            where type = 1
+        </if>
+        <if test="key!='' and key!='已处理' and key!='未处理' and key!=null ">
+            where question_id like '%${key}%'
+            or name like '%${key}%'
+            or content like '%${key}%'
+        </if>
+    </select>
+
+    <select id="getAllQuestion" resultMap="Question">
+        select *
+        from ab_zixun_questions
+        order by question_id
+        limit #{begin}, #{pageSize};
+    </select>
+    <select id="getKeyQuestion" resultMap="Question">
+        select *
+        from ab_zixun_questions
+        <if test="key=='未处理' ">
+            where type = 0
+        </if>
+        <if test="key=='已处理' ">
+            where type = 1
+        </if>
+        <if test="key!='' and key!='已处理' and key!='未处理' and key!=null ">
+            where question_id like '%${key}%'
+            or name like '%${key}%'
+            or content like '%${key}%'
+        </if>
+        order by question_id
+        limit #{begin}, #{pageSize}
+    </select>
+    <!--    根据类型查询问题-->
+    <select id="getQuestionByType" parameterType="java.lang.Integer" resultMap="Question">
+        select *
+        from ab_zixun_questions
+        where `type` = #{atr};
+    </select>
+
+    <!--    根据Id查询问题-->
+    <select id="getQuestionById" parameterType="java.lang.Integer" resultMap="Question">
+        select *
+        from ab_zixun_questions
+        where `question_id` = #{atr};
+    </select>
+
+
+    <!--    查询所有的回复-->
+    <select id="getAllReply" resultMap="Reply">
+        select *
+        from ab_zixun_reply;
+    </select>
+
+    <!--    通过问题id查询回复-->
+    <select id="getReplyByQuestion" parameterType="java.lang.Integer" resultMap="Reply">
+        select *
+        from ab_zixun_reply
+        where question_id = #{atr};
+    </select>
+
+    <!--    删除问题-->
+    <delete id="deleteQuestion" parameterType="java.lang.Integer">
+        delete
+        from ab_zixun_questions
+        where question_id = #{atr};
+    </delete>
+    <delete id="deleteReplyByQuestion" parameterType="java.lang.Integer">
+        delete
+        from ab_zixun_reply
+        where question_id = #{atr};
+    </delete>
+
+    <!--    删除回复-->
+    <delete id="deleteReply" parameterType="java.lang.Integer">
+        delete
+        from ab_zixun_reply
+        where reply_id = #{atr};
+    </delete>
+
+    <delete id="deleteQRWithJQR">
+        delete
+        from ab_zixun_user_message
+        where userQuestion = #{q}
+          and manager_answer = #{r};
+    </delete>
+
+    <!--    添加回复-->
+    <insert id="savaReply" parameterType="com.abs.pojo.AbZixunReply">
+        insert into ab_zixun_reply(reply_id, question_id, reply_content)
+        values (#{replyId}, #{questionId}, #{replyContent})
+    </insert>
+
+    <update id="updateQuestionType">
+        update ab_zixun_questions
+        set type = 1
+        where question_id = #{questionId}
+    </update>
+
+    <!--    添加问题-->
+    <insert id="addQRtoJQR">
+        insert into ab_zixun_user_message(userId, userQuestion, manager_answer, status)
+        values (#{id}, #{question}, #{content}, 1)
+    </insert>
+
+    <!--    添加问题-->
+    <insert id="savaQuestion" parameterType="com.abs.pojo.AbZixunQuestions">
+        insert into ab_zixun_questions(question_id, `name`, content, `type`)
+        values (#{questionId}, #{name}, #{content}, #{type})
+    </insert>
+
+
+</mapper>

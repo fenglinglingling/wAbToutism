@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.abs.mapper.AbCultureFestivalMapper">
+    <resultMap id="AbFestivalInfo" type="com.abs.pojo.AbCultureFestival">
+        <id property="fes_id" column="fes_id"/>
+        <result property="fes_name" column="fes_name"/>
+        <result property="fes_intro" column="fes_intro"/>
+        <result property="fes_img" column="fes_img"/>
+        <result property="fes_origin" column="fes_origin"/>
+        <result property="fes_process" column="fes_process"/>
+        <result property="fes_influence" column="fes_influence"/>
+        <result property="fes_status" column="fes_status"/>
+    </resultMap>
+
+    <select id="AbFestivalInfoByName" parameterType="String" resultMap="AbFestivalInfo">
+        select *
+        from ab_culture_festival
+        where fes_name=#{fes_name}
+    </select>
+
+
+</mapper>

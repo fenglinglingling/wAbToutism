@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<script src="../../../static/layui/js/jquery-3.2.1.min.js"></script>
+<link rel="stylesheet" href="../../../static/layui/css/layui2.css">
+<script src="../../../static/layui/layui.js"></script>
+<body>
+<form class="layui-form" id="formUpdate" lay-filter="example">
+    <br>
+    <div class="layui-form-item">
+        <label class="layui-form-label">地区编号</label>
+        <div class="layui-input-inline">
+            <input type="text" name="id" value="" placeholder="请输入地区编号" readonly
+                   autocomplete="off" class="layui-input">
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">地区名</label>
+        <div class="layui-input-inline">
+            <input type="text" name="name" placeholder="请输入地区名"
+                   autocomplete="off" class="layui-input">
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">时长</label>
+        <div class="layui-input-inline">
+            <input type="text" name="time" placeholder="请输入时长"
+                   autocomplete="off" class="layui-input">
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">人均价格</label>
+        <div class="layui-input-inline">
+            <input type="text" name="renjun" placeholder="请输入人均价格"
+                   autocomplete="off" class="layui-input">
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">热度</label>
+        <div class="layui-input-inline">
+            <input type="number" name="hot" value="10"  min="10" max="3000"
+                   style="font-size: 25px;font-weight: bolder"
+                   autocomplete="off" class="layui-input">
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <div class="layui-form-item layui-form-text">
+            <label class="layui-form-label">中文介绍</label>
+            <div class="layui-input-inline" style="width: 500px">
+                <textarea name="introduction" placeholder="请输入内容" class="layui-textarea"></textarea>
+            </div>
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <div class="layui-form-item layui-form-text">
+            <label class="layui-form-label">英文介绍</label>
+            <div class="layui-input-inline" style="width: 500px">
+                <textarea name="introduction2" placeholder="请输入内容" class="layui-textarea"></textarea>
+            </div>
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <div class="layui-input-block">
+            <button type="button" class="layui-btn" id="update">修改</button>
+            <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+        </div>
+    </div>
+</form>
+
+<script>
+    //查看某个的数据
+    layui.use(['form'], function () {
+        var form = layui.form
+        //查询该用户的数据
+        $.ajax({
+            url: "selectDiQuById",
+            method: "get",
+            dataType: "json",
+            success(e) {
+                //进行数据填充
+                form.val('example', {
+                    "id":e.DiQu.id
+                    , "name":e.DiQu.name
+                    , "order": e.DiQu.order
+                    , "time": e.DiQu.time
+                    , "renjun": e.DiQu.renjun
+                     ,"hot": e.DiQu.hot
+                    , "introduction": e.DiQu.introduction
+                    , "introduction2": e.DiQu.introduction2
+                });
+            },
+            error() {
+                alert("请求失败！")
+            }
+        })
+    })
+        //提交修改
+    $("#update").on('click',function () {
+        let diqu = $("#formUpdate").serializeArray()
+        $.ajax({
+            url:"updateDiQu",
+            method:"put",
+            data:diqu,
+            dataType:"json",
+            success(e){
+                if (e.code == 200){
+                    parent.layer.closeAll()
+                    parent.layer.msg("添加成功",{time:3000,icon:1,shade:[0.5,"#00",true]})
+                    parent.layui.table.reload("diquTable")
+                }else if (e.code == 500){
+                    parent.layer.closeAll()
+                    parent.layer.msg("添加失败",{time:3000,icon:2,shade:[0.5,"#00",true]})
+                    parent.layui.table.reload("diquTable")
+                }
+            },
+            error(){
+                parent.layer.msg("添加失败，该地区可能已经存在",{time:3000,icon:2,shade:[0.5,"#00",true]})
+            }
+        })
+    })
+</script>
+</body>
+</html>

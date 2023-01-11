@@ -1,0 +1,133 @@
+<!doctype html>
+<html class="no-js" lang="zxx">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <title>活动详情</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- <link rel="manifest" href="site.webmanifest"> -->
+    <link rel="shortcut icon" type="image/x-icon" href="img/favicon.png">
+    <!-- Place favicon.ico in the root directory -->
+
+    <!-- CSS here -->
+    <link rel="stylesheet" href="../static/css2/bootstrap.min.css">
+    <link rel="stylesheet" href="../static/css2/owl.carousel.min.css">
+    <link rel="stylesheet" href="../static/css2/magnific-popup.css">
+    <link rel="stylesheet" href="../static/css2/font-awesome.min.css">
+    <link rel="stylesheet" href="../static/css2/themify-icons.css">
+    <link rel="stylesheet" href="../static/css2/nice-select.css">
+    <link rel="stylesheet" href="../static/css2/flaticon.css">
+    <link rel="stylesheet" href="../static/css2/gijgo.css">
+    <link rel="stylesheet" href="../static/css2/animate.css">
+    <link rel="stylesheet" href="../static/css2/slick.css">
+    <link rel="stylesheet" href="../static/css2/slicknav.css">
+
+    <link rel="stylesheet" href="../static/css2/style.css">
+
+    <link rel="stylesheet" href="../static/layui/css/layui.css" media="all">
+
+</head>
+
+<body>
+
+    <!-- bradcam_area  -->
+    <div class="layui-carousel" id="test1">
+        <div carousel-item>
+            <div style="background-image: url('../static/image/banner-1.png');"></div>
+            <div style="background-image: url('../static/image/banner-2.png');"></div>
+            <div style="background-image: url('../static/image/banner-3.png');"></div>
+            <div style="background-image: url('../static/image/banner-4.png');"></div>
+        </div>
+    </div>
+    <!--/ bradcam_area  -->
+
+
+    
+    <div class="about_story">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="story_heading">
+                        <h3 id="cul_festival_name">历史文化</h3>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-11 offset-lg-1">
+                            <div class="story_info">
+                                <h3 style="color: red;">历史起源</h3>
+                                <div class="row">
+                                    <div class="col-lg-9" id="cul_festival_origin">
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-11 offset-lg-1">
+                            <h3 style="color: red;">节日过程</h3>
+                            <div class="story_info">
+                                <div class="row">
+                                    <div class="col-lg-9" id="cul_festival_process">
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-11 offset-lg-1">
+                            <h3 style="color: red;">节日影响</h3>
+                            <div class="story_info">
+                                <div class="row">
+                                    <div class="col-lg-9" id="cul_festival_influence">
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!--Javascript -->
+    <script src="../static/js/jquery-3.6.0.min.js" type="text/javascript"></script>
+    <script src="../static/layui/layui.js" type="text/javascript"></script>
+    <script>
+        layui.use('carousel', function(){
+            var carousel = layui.carousel;
+            //建造实例
+            carousel.render({
+                elem: '#test1'
+                ,width: '100%' //设置容器宽度
+                ,height:'600px'
+                ,arrow: 'always' //始终显示箭头
+                //,anim: 'updown' //切换动画方式
+            });
+        });
+
+
+        $(function () {
+            $.ajax({
+                url:"/culture/getFestivalInfoByName",
+                data:{},
+                type:"get",
+                dataType:"json",
+                success:function (res) {
+                    alert(res.data.fes_id);
+                    $("#cul_festival_name").html(res.data.fes_name);
+                    $("#cul_festival_origin").append(res.data.fes_origin);
+                    $("#cul_festival_process").append(res.data.fes_process);
+                    $("#cul_festival_influence").append(res.data.fes_influence);
+
+                }
+            })
+        })
+    </script>
+</body>
+
+</html>

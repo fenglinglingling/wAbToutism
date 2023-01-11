@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script type="text/javascript" src="../static/js/jquery-3.6.0.min.js"></script>
+
+</head>
+<body>
+<h2>注册</h2>
+
+<form id="from" action="" method="post" enctype="multipart/form-data">
+    手机号:<input id="phone" type="text" name="phone"><br><br>
+    密码  :<input id="password" type="password" name="password"><br><br>
+<!--    登录 1还是注册2:<input id="id_1"  type="text" name="type">-->
+      验证码:<input id="identify-input" type="text" name="VerifyCode">
+      <img id="identify-img" src="/User/get_VerifyCode"><br><br>
+
+    <!--  <img  id="img" src="" >-->
+    <input id="bt" type="submit" value="注册">
+    <form>头像选择
+        <input id="file_1" name="file" type="file" ><br>
+    </form>
+</form>
+
+</form>
+<script>
+    let formData
+
+    $("#identify-img").on('click',function (){
+        // 点击验证码那个图片的时候，我们输入的验证码那个框就会清空
+        $('#identify-input').val('')
+        //而且我们点击验证码的时候，希望它可以改变验证码内容，其实是通过发送新请求来改变验证码内容
+        $('#identify-img').attr('src','/User/get_VerifyCode?'+Math.random())
+    })
+$("#bt").click(function () {
+    // console.log(document.getElementById('phone').value)
+    // console.log($("#phone").val())
+    //
+    // formData = new FormData();
+    // formData.append("file",document.getElementById('file_1').files[0])
+
+
+    $.ajax({
+        url: '/User/user_RegisterAndLogin',
+        data: {
+            "type": '2',
+            "phone":$("#phone").val(),
+            "password":$("#password").val(),
+            "VerifyCode": $("#identify-input").val(),
+            // "file":formData
+        },
+        dataType: 'json',
+        // processData: false,
+        // contentType:false,
+        type: 'post',
+        success: function (res) {
+            alert(res.message)
+            if (res.code==="300"){
+                $('#identify-img').attr('src','/User/get_VerifyCode?'+Math.random())
+            }
+        },
+        error:function () {
+            alert("接口错误")
+        }
+    })
+})
+</script>
+
+
+</body>
+</html>

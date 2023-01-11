@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="../../static/layui/css/layui3.css">
+    <script src="../../static/js/jq.js"></script>
+    <script src="../../static/layui/layui.js"></script>
+</head>
+<body>
+        <div class="layui-container">
+            <div class="layui-row">
+                <fieldset class="layui-elem-field layui-field-title" style="margin-top: 30px;">
+                    <legend>浏览记录</legend>
+                </fieldset>
+                <ul class="layui-timeline" id="content">
+                </ul>
+            </div>
+        </div>
+
+</body>
+<script type="text/javascript" th:inline="none">
+    var userId;
+    //获取当前登录账号的id
+    $.ajax({
+        url:"getIdByMy",
+        dataType:"json",
+        success:function(res){
+            userId=res.userId;
+            //获取当前账号的浏览记录
+            $.ajax({
+                url:"getMyHuatiRecord",
+                data:{"userId":res.userId},
+                dataType:"json",
+                success:function(res){
+                    console.log(res.huatis);
+                    //赋值
+                    $.each(res.huatis,function (i,item){
+                        var s="<li class=\"layui-timeline-item\">\n" +
+                            "                <i class=\"layui-icon layui-timeline-axis\"></i>\n" +
+                            "                <div class=\"layui-timeline-content layui-text\">\n" +
+                            "\n" +
+                            "                    <h3 class=\"layui-timeline-title\" id='time"+i+"'>"+item.time+"</h3>\n" +
+                            "                    <span><strong>标题:</strong></span><span id='title"+i+"'>"+item.title+"</span>\n" +
+                            "                    <h4><strong>内容:</strong></h4>\n" +
+                            "                    <p>\n" +item.introduction.substring(0,30)+
+                            "                    </p>\n" +
+                            "\n" +
+                            "                    <button class='layui-btn layui-btn-normal' onclick='detail("+item.topicId+")'>查看</button>   <button class='layui-btn layui-btn-normal' onclick='del("+item.topicId+")'>删除</button>"+
+                            "                </div>\n" +
+                            "            </li>";
+                        $("#content").append(s);
+                    });
+
+                }
+            });
+        }
+    });
+    function del(topicId){
+        $.ajax({
+           url:"deleteMyHuatiRecord",
+            type:"delete",
+            data:{"topicId":topicId},
+            dataType:"json",
+            success:function(res){
+               if (res.code==200){
+                   layer.msg("删除成功");
+                   window.location.reload();
+               }else {
+                   layer.msg("删除失败");
+               }
+            }
+        });
+    }
+    function detail(topicId){
+        localStorage.topicId=topicId;
+        $.ajax({
+            url:"addHuatiRead",
+            type:"put",
+            data:{"topic_id":topicId},
+            dataType:"json",
+            success:function (res){
+                window.location.href="blog-details";
+            }
+        });
+    }
+
+</script>
+</html>

@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>我的路线</title>
+</head>
+<script src="../../static/layui/js/jquery-3.2.1.min.js"></script>
+<link rel="stylesheet" href="../../static/layui/css/layui3.css">
+<script src="../../static/layui/layui.js"></script>
+<body>
+<table class="layui-hide" id="luxianTable" lay-filter="test"></table>
+
+<script type="text/html" id="toolbarDemo">
+    <div class="layui-btn-container">
+        <button class="layui-btn layui-btn-sm" lay-event="deletes"><i class="layui-icon layui-icon-delete"></i>批量删除</button>
+    </div>
+</script>
+
+<script type="text/javascript" th:inline = "none">
+    layui.use('table', function () {
+        var table = layui.table;
+
+        table.render({
+            elem: '#luxianTable'
+            , url: 'selectAllLuXian'
+            , toolbar: '#toolbarDemo' //开启头部工具栏，并为其绑定左侧模板
+            , defaultToolbar: ['filter', 'exports', 'print', { //自定义头部工具栏右侧图标。如无需自定义，去除该参数即可
+                title: '提示'
+                , layEvent: 'LAYTABLE_TIPS'
+                , icon: 'layui-icon-tips'
+            }]
+            , title: '用户数据表'
+            , cols: [[
+                {type: 'checkbox'}
+                , {field: 'id', title: '路线号', width: 100, sort: true}
+                , {field: 'uerId', title: '规划人', width: 100,}
+                , {field: 'users', title: '出行人', width: 200}
+                , {field: 'way', title: '出行方式', width: 100}
+                , {field: 'type', title: '路线标签', width: 120}
+                , {field: 'price', title: '预估费用', width: 120}
+                , {field: 'startTime', title: '出发日期', width: 120}
+                , {field: 'endTime', title: '结束日期', width: 120}
+                , {field: 'startAddress', title: '出发地', width: 120}
+                , {field: 'endAddress', title: '目的地'}
+            ]]
+            , page: true
+        });
+        //头工具栏事件
+        table.on('toolbar(test)', function (obj) {
+            var checkStatus = table.checkStatus(obj.config.id);
+            var data = checkStatus.data;
+            switch (obj.event) {
+                case 'deletes':
+                    if (data.length < 1) {
+                        layer.msg("未选择数据！")
+                    } else {
+                        let ids = "";
+                        for (let i = 0; i < data.length; i++) {
+                            id = data[i].id + ";"
+                            ids += id;
+                        }
+                        layer.confirm('你确实要删除路线' + ids + '吗？', {
+                            btn: ['确认', '取消'] //按钮
+                        }, function () {
+                            let ids = [];
+                            for (let i = 0; i < data.length; i++) {
+                                ids.push(data[i].id)
+                            }
+                            $.ajax({
+                                url: "delLuXian",
+                                method: "delete",
+                                traditional: true,//这里设为true就可以传递数组了
+                                data: {"ids": ids},
+                                dataType: "json",
+                                success(e) {
+                                    if (e.code == 200) {
+                                        layer.closeAll()
+                                        layer.msg("删除成功", {time: 3000, icon: 1, shade: [0.5, "#00", true]})
+                                        layui.table.reload("luxianTable")   //主界面的table的id
+                                    } else if (e.code == 500) {
+                                        layer.closeAll()
+                                        layer.msg("删除失败", {time: 3000, icon: 2, shade: [0.5, "#00", true]})
+                                        layui.table.reload("luxianTable")
+                                    }
+                                },
+                                error() {
+                                    layer.closeAll()
+                                    layer.msg("删除失败,请联系管理员！", {time: 3000, icon: 2, shade: [0.5, "#00", true]})
+                                    layui.table.reload("luxianTable")   //主界面的table的id
+                                }
+                            })
+
+                        });
+                    }
+
+                    break;
+                case 'LAYTABLE_TIPS':
+                    layer.alert('这是工具栏右侧自定义的一个图标按钮');
+                    break;
+            }
+        });
+    });
+</script>
+</body>
+</html>

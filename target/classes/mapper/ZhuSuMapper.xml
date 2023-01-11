@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.abs.mapper.ZhusuMapper">
+    <resultMap id="ZhuSuMap" type="com.abs.pojo.AbZhusuZhusu">
+        <id column="zhusu_id" property="zhusuId"/>
+    </resultMap>
+    <resultMap id="ZhusuOrderMap" type="com.abs.pojo.AbZhusuOrders">
+        <result column="zhusu_id" property="zhusuId"/>
+    </resultMap>
+
+    <insert id="addOrders" parameterType="com.abs.pojo.AbZhusuOrders">
+        insert into ab_zhusu_orders (userid, zhusu_id, time)
+        values (#{userid},#{zhusuId},#{time});
+    </insert>
+    <select id="selectAllZhuSus" resultMap="ZhuSuMap">
+        select *
+        from ab_zhusu_zhusu;
+
+    </select>
+    <select id="selectByName" parameterType="String" resultMap="ZhuSuMap">
+        select *
+        from ab_zhusu_zhusu where zs_name = #{name};
+    </select>
+
+    <select id="selectById" parameterType="integer" resultMap="ZhuSuMap">
+        select *
+        from ab_zhusu_zhusu where zhusu_id =#{id};
+    </select>
+
+
+    <select id="selectByType" parameterType="String" resultMap="ZhuSuMap">
+        select *
+        from ab_zhusu_zhusu where zs_type = #{type};
+    </select>
+
+    <select id="selectByHot" resultMap="ZhuSuMap">
+        select *
+        from ab_zhusu_zhusu order by zs_hot desc ;
+    </select>
+
+    <select id="selectFourByHot" resultMap="ZhuSuMap">
+        select *
+        from ab_zhusu_zhusu order by zs_hot desc limit 0,4 ;
+    </select>
+    <select id="selectOrders" parameterType="integer" resultMap="ZhusuOrderMap">
+        select *
+        from ab_zhusu_orders where zhusu_id = #{id};
+    </select>
+
+
+
+
+
+
+
+    <resultMap id="zhusu" type="com.abs.pojo.AbZhusuZhusu">
+        <id column="zhusu_id" property="zhusuId"/>
+        <result column="zs_name" property="zs_name"/>
+        <result column="zs_img" property="zs_img"/>
+        <result column="zs_tv" property="zs_tv"/>
+        <result column="zs_hot" property="zs_hot"/>
+        <result column="zs_introduction" property="zs_introduction"/>
+        <result column="zs_way" property="zs_way"/>
+        <result column="zs_price" property="zs_price"/>
+        <result column="zs_address" property="zs_address"/>
+        <result column="zs_type" property="zs_type"/>
+        <result column="zs_phone" property="zs_phone"/>
+    </resultMap>
+    <select id="selectZhuSuByPage" resultMap="zhusu">
+        select *
+        from ab_zhusu_zhusu
+        <where>
+            <if test="search != '' and search != null">
+                zs_name like "%"#{search}"%"
+            </if>
+        </where>
+        limit #{page},#{limit};
+    </select>
+    <select id="getZhusuId" resultMap="zhusu">
+        select * from ab_zhusu_zhusu where zhusu_id=#{id}
+    </select>
+    <insert id="sava">
+        insert into ab_zhusu_zhusu(zs_name, zs_img, zs_tv, zs_hot, zs_introduction, zs_way, zs_price, zs_address, zs_type, zs_phone)
+        VALUES (#{zs_name},#{zs_img},#{zs_tv},#{zs_hot},#{zs_introduction},#{zs_way},#{zs_price},#{zs_address},#{zs_type},#{zs_phone})
+    </insert>
+    <update id="update">
+        update ab_zhusu_zhusu
+        <set>
+            <if test="zs_name!=null and zs_name!=''">
+                zs_name=#{zs_name},
+            </if>
+            <if test="zs_img!=null and zs_img!=''">
+                zs_img=#{zs_img},
+            </if>
+            <if test="zs_tv!=null and zs_tv!=''">
+                zs_tv=#{zs_tv},
+            </if>
+            <if test="zs_hot!=null and zs_hot!=''">
+                zs_hot=#{zs_hot},
+            </if>
+            <if test="zs_introduction!=null and zs_introduction!=''">
+                zs_introduction=#{zs_introduction},
+            </if>
+            <if test="zs_way!=null and zs_way!=''">
+                zs_way=#{zs_way},
+            </if>
+            <if test="zs_price!=null and zs_price!=''">
+                zs_price=#{zs_price},
+            </if>
+            <if test="zs_address!=null and zs_address!=''">
+                zs_address=#{zs_address},
+            </if>
+            <if test="zs_type!=null and zs_type!=''">
+                zs_type=#{zs_type},
+            </if>
+            <if test="zs_phone!=null and zs_phone!=''">
+                zs_phone=#{zs_phone},
+            </if>
+        </set>
+        where zhusu_id=#{zhusuId}
+
+    </update>
+    <delete id="delete">
+        delete from ab_zhusu_zhusu where zhusu_id=#{id}
+    </delete>
+
+</mapper>
