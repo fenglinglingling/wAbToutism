@@ -11,4 +11,5 @@ public class TourismApplication {
         SpringApplication.run(TourismApplication.class, args);
     }
 //    http://localhost:8080/swagger-ui.html
+//    git测试
 }
