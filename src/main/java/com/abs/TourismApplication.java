@@ -19,4 +19,6 @@ public class TourismApplication {
 
 //    push commit 记得先提交
 //    pull 一下！
+//    push前拉取pull
+//    gitee test!
 }
