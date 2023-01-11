@@ -16,4 +16,6 @@ public class TourismApplication {
 //    用hot-fix分支来测试
 //    master合并冲突demo 同样 记得先提交
 //    hot-fix 合并冲突dome 改完记得先提交
+
+//    push commit 记得先提交
 }
