@@ -15,4 +15,5 @@ public class TourismApplication {
 //    追踪过的文件也可以不用添加到暂存区，直接提交也行！
 //    用hot-fix分支来测试
 //    master合并冲突demo 同样 记得先提交
+//    hot-fix 合并冲突dome 改完记得先提交
 }
