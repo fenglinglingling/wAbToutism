@@ -18,4 +18,5 @@ public class TourismApplication {
 //    hot-fix 合并冲突dome 改完记得先提交
 
 //    push commit 记得先提交
+//    pull 一下！
 }
